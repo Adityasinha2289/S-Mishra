@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shivyanshi Mishra ❤️</title>
+<style>
+  :root {
+    --bg-color: #cce7ff;
+    --card-bg: #e6f0ff;
+    --caption-bg: #d9eaff;
+    --caption-color: #004080;
+    --description-color: #004080cc;
+    --header-footer-bg: #a3d0ff;
+    --header-footer-color: #003366;
+    --button-bg: rgba(0, 64, 128, 0.7);
+  }
+
+  body.pink-theme {
+    --bg-color: #ffe3f1;
+    --card-bg: #ffedf4;
+    --caption-bg: #ffeef5;
+    --caption-color: #ad1457;
+    --description-color: #ad1457cc;
+    --header-footer-bg: #ffc1da;
+    --header-footer-color: #880e4f;
+    --button-bg: rgba(136, 14, 79, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-color);
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background 0.3s ease;
+  }
+
+  header, footer {
+    text-align: center;
+    padding: 1rem 0;
+    background: var(--header-footer-bg);
+    color: var(--header-footer-color);
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  /* Toggle container */
+  .toggle-container {
+    display: inline-flex;
+    align-items: center;
+    background: #ddd;
+    border-radius: 30px;
+    padding: 5px;
+    user-select: none;
+    margin-top: 0.7rem;
+  }
+
+  /* Hide the checkbox */
+  #themeSwitch {
+    display: none;
+  }
+
+  /* Labels for theme */
+  .toggle-label {
+    cursor: pointer;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #666;
+    user-select: none;
+    z-index: 2;
+  }
+
+  /* Active label colors */
+  .toggle-label.skyblue {
+    color: #004080;
+  }
+
+  .toggle-label.pink {
+    color: #ad1457;
+  }
+
+  /* Slider wrapper (label linked to checkbox for toggling) */
+  .toggle-slider {
+    position: relative;
+    width: 60px;
+    height: 34px;
+    background: #bbb;
+    border-radius: 30px;
+    margin: 0 5px;
+    flex-shrink: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  /* The circle */
+  .toggle-slider::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+
+  /* Move circle when checked */
+  #themeSwitch:checked + .toggle-slider::before {
+    transform: translateX(26px);
+  }
+
+  /* Change label colors depending on toggle */
+  /* Sky Blue active when unchecked */
+  #themeSwitch:not(:checked) ~ .toggle-label.skyblue {
+    color: #004080;
+    font-weight: 700;
+  }
+  #themeSwitch:not(:checked) ~ .toggle-label.pink {
+    color: #666;
+    font-weight: 600;
+  }
+
+  /* Pink active when checked */
+  #themeSwitch:checked ~ .toggle-label.pink {
+    color: #ad1457;
+    font-weight: 700;
+  }
+  #themeSwitch:checked ~ .toggle-label.skyblue {
+    color: #666;
+    font-weight: 600;
+  }
+
+  footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  main.gallery {
+    flex: 1;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .photo {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+
+  .photo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  }
+
+  .photo img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .caption {
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--caption-color);
+    background: var(--caption-bg);
+    text-align: center;
+  }
+
+  .description {
+    padding: 0 16px 12px 16px;
+    font-size: 0.9rem;
+    color: var(--description-color);
+    text-align: center;
+  }
+
+  .fullscreen-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .fullscreen-overlay.active {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .fullscreen-overlay img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    margin-bottom: 1rem;
+    object-fit: contain;
+  }
+
+  .fullscreen-caption {
+    color: #a3d0ff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .fullscreen-description {
+    color: #d9eaff;
+    font-size: 1rem;
+    text-align: center;
+    max-width: 80vw;
+    margin-bottom: 1rem;
+  }
+
+  .close-btn {
+    background: var(--button-bg);
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    filter: brightness(0.9);
+  }
+
+  @media (max-width: 600px) {
+    .caption {
+      font-size: 1rem;
+    }
+    .description {
+      font-size: 0.8rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Shivyanshi Mishra ❤️</h1>
+  <div class="toggle-container" aria-label="Theme toggle">
+    <label for="themeSwitch" class="toggle-label skyblue">Sky Blue</label>
+    <input type="checkbox" id="themeSwitch" aria-checked="false" />
+    <label for="themeSwitch" class="toggle-slider" tabindex="0" role="switch" aria-checked="false" aria-label="Toggle theme"></label>
+    <label for="themeSwitch" class="toggle-label pink">Pink</label>
+  </div>
+</header>
+
+<main class="gallery">
+  <script>
+    const captions = [
+  "Your smile makes me happy",
+  "How do you look so good?",
+  "You make me calm",
+  "I love your laugh",
+  "You’re my favorite person",
+  "When I see you, I smile",
+  "You’re my home",
+  "My heart picked you",
+  "You don’t need to try",
+  "Small moments with you matter",
+  "You’re beautiful inside and out",
+  "I feel safe with you",
+  "You’re my lucky charm",
+  "Are you even real?",
+  "You make me smile",
+  "You’re my favorite hello",
+  "I’m not perfect",
+  "Just one look from you",
+  "You bring out the best in me",
+  "I keep falling for you"
+];
+
+const descriptions = [
+  "When you smile, I forget all my problems.",
+  "I still can’t believe you’re mine.",
+  "Thinking of you helps me relax.",
+  "It’s the best sound I know.",
+  "I always want to be with you.",
+  "It’s simple, but true.",
+  "I feel safe when you’re around.",
+  "I’d choose you every time.",
+  "You already take my breath away.",
+  "I remember everything we do together.",
+  "That’s why I love you.",
+  "I can be myself around you.",
+  "Everything feels better with you.",
+  "Sometimes it feels like a dream.",
+  "Even when I don’t say it.",
+  "And my hardest goodbye.",
+  "But loving you feels right.",
+  "Can fix my whole day.",
+  "I’m better because of you.",
+  "Again and again, every day."
+];
+
+    for (let i = 1; i <= 20; i++) {
+      document.write(`
+        <div class="photo" data-caption="${captions[i - 1]}" data-description="${descriptions[i - 1]}">
+          <img src="./photos/p${i}.jpeg" alt="${captions[i - 1]}" />
+          <div class="caption">${captions[i - 1]}</div>
+          <div class="description">${descriptions[i - 1]}</div>
+        </div>
+      `);
+    }
+  </script>
+</main>
+
+<footer>
+  <p> Aditya Mishra? ❤️</p>
+</footer>
+
+<!-- Fullscreen Overlay -->
+<div class="fullscreen-overlay" role="dialog" aria-modal="true" aria-label="Image preview">
+  <img src="" alt="" />
+  <div class="fullscreen-caption"></div>
+  <div class="fullscreen-description"></div>
+  <button class="close-btn" aria-label="Close image preview">Close</button>
+</div>
+
+<script>
+  // Fullscreen image logic
+  const overlay = document.querySelector('.fullscreen-overlay');
+  const overlayImg = overlay.querySelector('img');
+  const overlayCaption = overlay.querySelector('.fullscreen-caption');
+  const overlayDescription = overlay.querySelector('.fullscreen-description');
+  const closeBtn = overlay.querySelector('.close-btn');
+
+  document.querySelectorAll('.photo').forEach(photo => {
+    photo.querySelector('img').addEventListener('click', () => {
+      overlayImg.src = photo.querySelector('img').src;
+      overlayImg.alt = photo.querySelector('img').alt;
+      overlayCaption.textContent = photo.dataset.caption;
+      overlayDescription.textContent = photo.dataset.description;
+      overlay.classList.add('active');
+      closeBtn.focus();
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    overlay.classList.remove('active');
+    overlayImg.src = '';
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeBtn.click();
+  });
+
+  // Theme toggle
+  const themeSwitch = document.getElementById('themeSwitch');
+  const toggleSlider = document.querySelector('.toggle-slider');
+
+  function updateAria() {
+    const checked = themeSwitch.checked;
+    themeSwitch.setAttribute('aria-checked', checked);
+    toggleSlider.setAttribute('aria-checked', checked);
+  }
+
+  themeSwitch.addEventListener('change', () => {
+    document.body.classList.toggle('pink-theme', themeSwitch.checked);
+    updateAria();
+  });
+
+  // Initialize ARIA attributes on page load
+  updateAria();
+</script>
+
+</body>
+</html>
